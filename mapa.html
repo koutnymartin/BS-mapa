@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<!-- https://api.mapy.cz/view?page=geometry-simple -->
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script type="text/javascript" src="https://api.mapy.cz/loader.js"></script>
+    <script>Loader.load()</script>    
+    <title>Mapa</title>
+
+    <!-- CSS -->
+    <style>
+        #m {
+            height: 98vh; /*vyska je 98 vysky okna*/
+            width: 100%; /*sirka je na max. okna*/
+        }
+    </style>
+</head>
+
+<body>
+    <div id="m"></div>
+
+    <!-- JavaScript -->
+    <script type="text/javascript">
+        var center = SMap.Coords.fromWGS84(17.3331261, 49.5500889); // centrum zobrazeni = kostel
+        var m = new SMap(JAK.gel("m"), center, 16); // priblizeni -> cim vetsi tim bliz
+        m.addDefaultControls(); // ovladaci cajky
+
+        var layer = new SMap.Layer.Geometry();
+        m.addLayer(layer);
+        layer.enable();
+
+        // VYBER MAPY -> zakladni, turisticka, letecka
+        m.addDefaultLayer(SMap.DEF_OPHOTO);
+        m.addDefaultLayer(SMap.DEF_TURIST);
+        m.addDefaultLayer(SMap.DEF_BASE).enable();
+        var layerSwitch = new SMap.Control.Layer({
+        width: 65,
+        items: 3,
+        page: 3
+        });
+        layerSwitch.addDefaultLayer(SMap.DEF_BASE);
+        layerSwitch.addDefaultLayer(SMap.DEF_OPHOTO);
+        layerSwitch.addDefaultLayer(SMap.DEF_TURIST);
+        m.addControl(layerSwitch, {left:"8px", top:"9px"});
+
+        // TVARY
+        // 01
+        var tvar01 = [
+        SMap.Coords.fromWGS84(17.3341186, 49.5465561), // skola
+        SMap.Coords.fromWGS84(17.3361947, 49.5509517), // spolecnak
+        SMap.Coords.fromWGS84(17.3331261, 49.5500889), // kostel
+        ];        
+        var moznTvary = {
+        color: "#FFA07A" // LightSalmon
+        };
+        var polygon01 = new SMap.Geometry(SMap.GEOMETRY_POLYGON, null, tvar01, moznTvary);
+        layer.addGeometry(polygon01); // vlozeni polygonu
+        
+        // 02
+        var tvar02 = [
+        SMap.Coords.fromWGS84(17.3324583, 49.5535167), // junacka alej
+        SMap.Coords.fromWGS84(17.3361947, 49.5509517), // spolecnak
+        SMap.Coords.fromWGS84(17.3331261, 49.5500889), // kostel
+        ];
+        var polygon02 = new SMap.Geometry(SMap.GEOMETRY_POLYGON, null, tvar02, moznTvary);
+        layer.addGeometry(polygon02);
+
+        // ZNACKY
+        // 01
+        var znacka01 = SMap.Coords.fromWGS84(17.3342394, 49.5493231); // priblizne stred
+        var layer = new SMap.Layer.Marker();
+        m.addLayer(layer);
+        layer.enable();
+        var moznZnacky = {};
+        var marker = new SMap.Marker(znacka01, "zn01", moznZnacky);
+        layer.addMarker(marker);
+        
+        // 02
+        var znacka02 = SMap.Coords.fromWGS84(17.3337783, 49.5512544);
+        var layer = new SMap.Layer.Marker();
+        m.addLayer(layer);
+        layer.enable();
+        var moznZnacky = {};
+        var marker = new SMap.Marker(znacka02, "zn02", moznZnacky);
+        layer.addMarker(marker);
+
+
+
+    //     var znacka = JAK.mel("div");
+    //     var obrazek = JAK.mel("img", {src:SMap.CONFIG.img+"/marker/drop-red.png"});
+    //     znacka.appendChild(obrazek);
+        
+        // var popisek = JAK.mel("div", {}, {position:"absolute", left:"0px", top:"2px", textAlign:"center", width:"22px", color:"white", fontWeight:"bold"});
+        // popisek.innerHTML = "1";
+        // znacka01.appendChild(popisek);
+
+    //     var vrstva = new SMap.Layer.Marker();
+    //     m.addLayer(vrstva);
+    //     vrstva.enable();
+
+    //     var marker = new SMap.Marker(m.getCenter(), null, {url:znacka});
+    //     vrstva.addMarker(marker);
+    </script>
+</body>
+</html>
